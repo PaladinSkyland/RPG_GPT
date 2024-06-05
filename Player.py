@@ -2,28 +2,26 @@
 # Class for player
 
 class Player:
-    def __init__(self, name = 'Player', level = 0 , exp= 0, hp = 100, attack = 1, defense = 1, gold = 0, items = [], equipped = [], statuseffect = [], alive = True):
+    def __init__(self, name='Player', exp=0, hp=100, attack=1, defense=1):
         self.name = name
-        self.level = level
         self.exp = exp
-        self.hp = hp
-        self.attack = attack
-        self.defense = defense
-        self.gold = gold
-        self.items = items
-        self.equipped = equipped
-        self.statuseffect = statuseffect
-        self.alive = alive
+        self.base_hp = hp
+        self.hp_loss = 0
+        self.base_attack = attack
+        self.base_defense = defense
+        self.gold = 0
+        self.inventory = {}
+        self.items = {}
+        self.statuseffect = {}
 
-    # Getters
     def get_stats(self):
-        return f"Name: {self.name}\nLevel: {self.level}\nExp: {self.exp}\nHP: {self.hp}\nAttack: {self.attack}\nDefense: {self.defense}\nGold: {self.gold}\n"
+        return f"Name: {self.name}\nLevel: {self.get_level()}\nExp: {self.exp}\nHP: {self.hp}\nAttack: {self.attack}\nDefense: {self.defense}\nGold: {self.gold}\n"
+
+    def get_inventory(self):
+        return self.inventory
 
     def get_items(self):
         return self.items
-
-    def get_equipped(self):
-        return self.equipped
 
     def get_gold(self):
         return self.gold
@@ -32,68 +30,76 @@ class Player:
         return self.exp
 
     def get_level(self):
-        return self.level
+        return self.xp // 100
 
-    def get_hp(self):
-        return self.hp
+    def get_max_hp(self):
+        return self.base_hp * self.get_level() + sum([item.hp for item in self.items.values()])
 
     def get_attack(self):
-        return self.attack
+        return self.base_attack * self.get_level() + sum([item.attack for item in self.items.values()]) + sum([status.attack for status in self.statuseffect.values()])
 
     def get_defense(self):
-        return self.defense
+        return self.base_defense * self.get_level() + sum([item.defense for item in self.items.values()]) + sum([status.defense for status in self.statuseffect.values()])
 
-    # Setters
-    def set_gold(self, gold):
-        self.gold = gold
-
-    def set_exp(self, exp):
-        self.exp = exp
-
-    def set_level(self, level):
-        self.level = level
-
-    def set_hp(self, hp):
-        self.hp = hp
-
-    def set_attack(self, attack):
-        self.attack = attack
-
-    def set_defense(self, defense):
-        self.defense = defense
-
-    def set_items(self, items):
-        self.items = items
-
-    def set_equipped(self, equipped):
-        self.equipped = equipped
-
-
-    # Adders
     def add_gold(self, gold):
         self.gold += gold
 
     def add_exp(self, exp):
         self.exp += exp
 
-    def add_hp(self, hp):
-        self.hp += hp
-
-    def add_attack(self, attack):
-        self.attack += attack
-
-    def add_defense(self, defense):
-        self.defense += defense
-
-    # item management
-    def add_item(self, item):
-        if item in self.items:
-            self.items[item] += 1
+    def restore_hp(self, hp):
+        if self.hp_loss > hp:
+            self.hp_loss -= hp
         else:
-            self.items[item] = 1
+            self.hp_loss = 0
+    
+    def take_damage(self, damage):
+        self.hp_loss += damage
 
-    def remove_item(self, item):
-        if item in self.items:
-            self.items[item] -= 1
-            if self.items[item] == 0:
-                del self.items[item]
+    def is_alive(self):
+        return self.hp_loss < self.get_max_hp()
+
+    def attack_target(self, target):
+        target.take_damage(self.attack)
+
+    def defeat(self, ennemy):
+        self.add_exp(ennemy.xp)
+        self.add_gold(ennemy.gold)
+
+    def clear_status(self):
+        for status in self.statuseffect.values():
+            if status.negative:
+                self.remove_status(status)
+
+    def add_status(self, status):
+        if status.name not in self.statuseffect:
+            self.statuseffect[status.name] = status
+    
+    def remove_status(self, status):
+        if status.name in self.statuseffect:
+            del self.statuseffect[status.name]
+
+    def add_to_inventory(self, consumable):
+        if consumable.name in self.inventory:
+            self.inventory[consumable.name]['quantity'] += 1
+        else:
+            self.inventory[consumable.name] = {'item': consumable, 'quantity': 1}
+
+    def remove_from_inventory(self, consumable):
+        if consumable.name in self.inventory:
+            self.inventory[consumable.name]['quantity'] -= 1
+            if self.inventory[consumable.name]['quantity'] == 0:
+                del self.inventory[consumable.name]
+    
+    def use_consumable(self, consumable):
+        if consumable.name in self.inventory:
+            consumable.use(self)
+            self.remove_item(consumable)
+
+    def equip_item(self, item):
+        if not item.name in self.items:
+            self.items[item.name] = item
+    
+    def unequip_item(self, item):
+        if item.name in self.items:
+            del self.items[item.name]
