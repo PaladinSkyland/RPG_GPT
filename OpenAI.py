@@ -15,6 +15,7 @@ class OpenAI:
     def return_completion(self, messages):
         completion = self.clientclient.chat.completions.create(
         model=self.model,
+        response_format={ "type": "json_object" },
         messages=messages
         )
         return completion.choices[0].message.text
