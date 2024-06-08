@@ -4,7 +4,7 @@
             "name": "IntroductionRPG",
             "description": "Introduce the RPG",
             "input": [],
-            "prompt": "Please perform the function of a text adventure game, following the rules listed below: \n\nPresentation Rules:\n\n1. Play the game in turns, starting with you. The previous context and player stats are always given to you before. The turn number is always given to you as well.\n\n2. The game output need to contain 2 part : One which is for the player and another which will be only for you and hidden from the player.\n\n3. The output will be in this format: \n{ \"for_player\": \n    { \"Description\": \"The environment description\", \n      \"Possible Actions\": [\"action1\", \"action2\", ...] \n    },\n\"for_game_master\": \n    { \"Commands_to_execute\": { \"commands\": [[\"1d6\"], [\"fight_enemy\",\"argument_for_fight_enemy\"], ...],},\n      \"Possible Actions Descritpiton\": [\"What to do if the player decides action 1\", \"What to do if the player decides action 2\", ...] } }\n\n5. Always wait for the player's next command. The player's input is always given to you.\n\n6. Stay in character as a text adventure game and respond to commands the way a text adventure game should.\n\n7. ALL game output is in json Object.\n\n"
+            "prompt": "Please perform the function of a text adventure game, following the rules listed below: \n\nPresentation Rules:\n\n1. Play the game in turns, starting with you. The previous context and player stats are always given to you before. The turn number is always given to you as well.\n\n2. The game output need to contain 2 part : 'for_player' which is for the player and 'for_game_master' which will be only for you and hidden from the player.\n\n3. The output will be in this format: \n{ \"for_player\": \n    { \"Description\": \"The environment description\", \n      \"Possible Actions\": [\"action1\", \"action2\", ...] \n    },\n\"for_game_master\": \n    { \"Commands_to_execute\": { \"commands\": [[\"1d6\"], [\"fight_enemy\",\"argument_for_fight_enemy\"], [...]],},\n      \"Possible Actions Description\": [\"Description of what to do if the player decides action 1\", \"Description of what to do if the player decides action 2\", ...] } }\n\n5. Always wait for the player's next command. The player's input is always given to you.\n\n6. Stay in character as a text adventure game and respond to commands the way a text adventure game should.\n\n7. ALL game output is in json Object."
         },
         {
             "name": "Who are you?",
@@ -18,6 +18,12 @@
             "description": "Show the result of a dice roll",
             "input": ["Dice_Type", "Results"],
             "prompt": "${Dice_Type} dice roll results: ${Results}"
+        },
+        {
+            "name": "Context_Valor",
+            "description": "Introduce Context for the RPG",
+            "input": [],
+            "prompt": "Context Window: \nIn the tumultuous era of the medieval age, the kingdoms of Valor stand at the crossroads of destiny. The land is fraught with political intrigue, warring factions, and ancient secrets waiting to be unraveled. As a valiant adventurer, you step into this world of chivalry and magic, where every decision shapes the fate of the realm. Will you pledge allegiance to a noble house, forging alliances and battling enemies to claim the throne? Or will you chart your own path, delving into forgotten ruins and mastering the arcane arts? As you journey through lush forests, bustling cities, and treacherous dungeons, your courage and cunning will be tested like never before. Will you rise as a legendary hero, revered by all, or succumb to the darkness that lurks in the shadows? The Kingdoms of Valor await your valorous deeds and epic quests!"
         }
     ]
 }
