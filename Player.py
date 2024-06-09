@@ -30,7 +30,7 @@ class Player:
         return self.exp
 
     def get_level(self):
-        return self.xp // 100
+        return 1 + self.exp // 100
 
     def get_max_hp(self):
         return self.base_hp * self.get_level() + sum([item.hp for item in self.items.values()])

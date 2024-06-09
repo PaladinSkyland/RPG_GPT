@@ -2,6 +2,7 @@ import json
 from OpenAI import OpenAIclass
 from Player import Player
 from Context import Context
+
 class Main :
     def __init__(self):
         self.player = Player()
@@ -31,12 +32,13 @@ class Main :
         print(self.context.environment.description)
         print("Possible Actions : ")
         for index, action in enumerate(self.context.actions):
-            print(index + 1, "for", action[0])
+            print(index + 1, "for", action["title"])
         choosen_action = int(input("Choose an action : ")) - 1
         self.context.choose_action(choosen_action)
         while True:
             print(self.context.choosen_action)
-            messages = self.header_messages + [self.openai.user_message(self.context.choosen_action[0]), self.openai.system_message(self.context.choosen_action[1])]
+            messages = self.header_messages + [self.openai.user_message(self.context.choosen_action["title"]), self.openai.system_message(self.context.choosen_action["description"])]
+            print(messages)
             response = self.openai.return_completion(messages)
             self.context.set_context_from_json(json.loads(response))
             print(self.context.environment.description)

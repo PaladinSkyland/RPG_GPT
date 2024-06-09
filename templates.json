@@ -33,6 +33,7 @@
         "negative": "bool",
         "hp": "int|null",
         "attack": "int|null",
-        "defense": "int|null"
+        "defense": "int|null",
+        "icon": "string"
     }
 }
