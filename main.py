@@ -5,12 +5,12 @@ from Enemy import Enemy
 from Item import Item
 from StatusEffect import StatusEffect
 from Consumable import Consumable
-from KeyboardInput import KeybordInput
+from KeyboardInput import KeyboardInput
 
 # create an instance of the custom liveable class
 console = CustomLiveable()
 
-with Live(console, refresh_per_second=10) as live, KeybordInput() as input:
+with Live(console, refresh_per_second=10) as live, KeyboardInput() as input:
     while True:
         key = input.getkey()
         if key == 'escape':

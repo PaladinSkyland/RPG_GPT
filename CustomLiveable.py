@@ -11,7 +11,8 @@ from threading import Thread
 
 class CustomLiveable:
     def __init__(self):
-        Console().clear()
+        self.console = Console()
+        self.console.clear()
         self.input = ''
         self.cursor = 0
         self.cursor_visible = True
@@ -20,7 +21,7 @@ class CustomLiveable:
 
 
     def __rich__(self):
-        page = []
+        page = [""]
         page.append(Align.center("Fight time :fire:"))
         page.append(Rule())
         page.append(Align.center("Goblin attacked you dealing 10 damage!"))
@@ -56,7 +57,7 @@ class CustomLiveable:
         group.append(f"Next action: {input}")
 
         page.append(Align.center(Group(*group)))
-        return Group(*page)
+        return Align(Group(*page, fit=False), vertical="top", height=self.console.height)
 
     def key_pressed(self, key):
         if key == 'backspace':
