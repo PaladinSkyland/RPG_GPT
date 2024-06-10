@@ -52,11 +52,15 @@ class KeyboardInput:
             elif len(b) > 1:
                 b = b[-1]
         elif os.name == 'nt':
-            b = msvcrt.getwch()
-            if b.isprintable():
-                return b
-            elif b in '\xe0\x00':
-                b = msvcrt.getwch()
+            try:
+                b = msvcrt.getch()
+                if b in b'\x00\xe0':
+                    b = msvcrt.getch()
+                elif b.decode().isprintable():
+                    return b.decode()
+                b = b.decode()
+            except UnicodeDecodeError:
+                return ''
         else:
             raise NotImplementedError("This OS is not supported.")
         return self.key_mapping.get(ord(b), b)
