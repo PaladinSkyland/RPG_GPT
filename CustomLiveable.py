@@ -98,7 +98,6 @@ class CustomLiveable:
         return Align(Group(*page, fit=False), vertical="top", height=self.console.height)
 
     def key_pressed(self, key):
-        print(key)
         if key == 'backspace' or key == 'delete':
             self.input = self.input[:-1]
         elif key == 'return':

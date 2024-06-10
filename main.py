@@ -42,7 +42,6 @@ class Main :
                 else:
                     messages = self.header_messages
                 response = self.openai.return_completion(messages)
-                print(response)
                 self.context.set_context_from_json(json.loads(response))
                 if len(self.context.actions) == 0:
                     continue
@@ -55,7 +54,7 @@ class Main :
                     if key == 'escape':
                         is_running = False
                         break
-                    if key == 'return':
+                    if key == 'return' and self.console.input != '':
                         break
                     self.console.key_pressed(key)
                 if not is_running:
