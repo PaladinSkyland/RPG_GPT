@@ -33,13 +33,13 @@ class Player:
         return 1 + self.exp // 100
 
     def get_max_hp(self):
-        return self.base_hp * self.get_level() + sum([item.hp for item in self.items.values()])
+        return self.base_hp + (self.get_level() - 1) + sum([item.hp for item in self.items.values()])
 
     def get_attack(self):
-        return self.base_attack * self.get_level() + sum([item.attack for item in self.items.values()]) + sum([status.attack for status in self.statuseffect.values()])
+        return self.base_attack + (self.get_level() - 1) + sum([item.attack for item in self.items.values()]) + sum([status.attack for status in self.statuseffect.values()])
 
     def get_defense(self):
-        return self.base_defense * self.get_level() + sum([item.defense for item in self.items.values()]) + sum([status.defense for status in self.statuseffect.values()])
+        return self.base_defense + 10 * (self.get_level() - 1) + sum([item.defense for item in self.items.values()]) + sum([status.defense for status in self.statuseffect.values()])
 
     def add_gold(self, gold):
         self.gold += gold
@@ -60,7 +60,9 @@ class Player:
         return self.hp_loss < self.get_max_hp()
 
     def attack_target(self, target):
-        target.take_damage(self.attack)
+        damage = self.get_attack() - target.defense
+        target.take_damage(damage)
+        return damage
 
     def defeat(self, ennemy):
         self.add_exp(ennemy.xp)

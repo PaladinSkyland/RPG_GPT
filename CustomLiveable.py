@@ -6,8 +6,11 @@ from rich.progress import Progress, BarColumn, MofNCompleteColumn
 from rich.prompt import Prompt
 from rich.table import Table
 from rich.panel import Panel
+from rich.text import Text
 import time
 from threading import Thread
+from rich.panel import Panel
+from rich.columns import Columns
 from rich.box import MINIMAL
 
 class CustomLiveable:
@@ -38,19 +41,19 @@ class CustomLiveable:
         progress = Progress("HP :yellow_heart:", BarColumn(bar_width=None), MofNCompleteColumn(), auto_refresh=False)
         progress.add_task("", completed=self.player.get_max_hp() - self.player.hp_loss, total=self.player.get_max_hp())
         group.append(progress)
-        grid = Table.grid(expand=True)
+        grid = Table(expand=True, box=None, show_header=False)
         grid.add_column(justify="left")
         grid.add_column(justify="left")
         grid.add_column(justify="left")
         grid.add_row(
-            f":crossed_swords: Attack: {self.player.get_attack()}",
-            f":shield: Defense: {self.player.get_defense()}",
+            f":crossed_swords:  Attack: {self.player.get_attack()}",
+            f"🛡️  Defense: {self.player.get_defense()}",
             f":chart_increasing: Effects: {' '.join([status.icon for status in self.player.statuseffect.values()])}"
         )
         grid.add_row(f":star: Level: {self.player.get_level()}", f":gem: XP: {self.player.get_exp()}", f":moneybag: Gold: {self.player.get_gold()}")
         group.append(grid)
         group.append("")
-        
+
         if self.enemy:
             group.append(f"{self.enemy.name} (enemy)")
             progress = Progress("HP :yellow_heart:", BarColumn(bar_width=None), MofNCompleteColumn(), auto_refresh=False)
@@ -62,16 +65,16 @@ class CustomLiveable:
             grid.add_column(justify="left")
             grid.add_row(
                 f":crossed_swords: Attack: {self.enemy.attack}",
-                f":shield: Defense: {self.enemy.defense}",
+                f"🛡️ Defense: {self.enemy.defense}",
                 f":chart_increasing: Effects: {' '.join([status.icon for status in self.enemy.statuseffect.values()])}"
             )
             grid.add_row(f":gem: XP: {self.enemy.xp}", f":moneybag: Gold: {self.enemy.gold}", "")
             group.append(grid)
             group.append("")
 
-        grid = Table.grid(padding=(1, 5))
-        grid.add_column(justify="left")
-        grid.add_column(justify="left")
+        grid = Table.grid(padding=(1, 3), collapse_padding=True, expand=True)
+        grid.add_column(justify="left", no_wrap=False, ratio=1, overflow="crop")
+        grid.add_column(justify="left", no_wrap=False, ratio=1, overflow="crop")
         row = []
         for i, action in enumerate(self.actions):
             icon = ":white_large_square:" if self.input != str(i + 1) else ":white_check_mark:"
@@ -81,13 +84,13 @@ class CustomLiveable:
                 row = []
         if row:
             grid.add_row(*row)
-        group.append(Align.center(Panel(grid, expand=False, title="Actions", title_align="left", padding=(1, 2))))
+        group.append(Panel(grid, expand=True, title="Actions", title_align="left", padding=(1, 2)))
         group.append("")
 
         # input
         if self.input.isnumeric() and int(self.input) in range(1, len(self.actions) + 1):
             action = self.actions[int(self.input) - 1]
-            group.append(f"Next action: {self.input} {action['icon']}  {action['title'].capitalize()}")
+            group.append(f"Next action: {self.input}. {action['icon']}  {action['title'].capitalize()}")
             group.append("")
             group.append(f"[dim]{action['description']}[/dim]")
         else:
@@ -112,8 +115,8 @@ class CustomLiveable:
                 self.input = str(len(self.actions))
             else:
                 self.input = str(int(self.input) % len(self.actions) + 1)
-        elif len(key) == 1 and key.isdigit() and int(self.input + key) in range(1, len(self.actions) + 1):
-            self.input += key
+        elif len(key) == 1 and key.isdigit() and int(key) in range(1, len(self.actions) + 1):
+            self.input = key
         self.cursor_visible = True
         self.last_action = time.time()
 

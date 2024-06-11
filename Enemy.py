@@ -13,7 +13,9 @@ class Enemy:
         self.health -= damage
 
     def attack_target(self, target):
-        target.take_damage(self.attack)
+        damage = self.attack - target.get_defense()
+        target.take_damage(damage)
+        return damage
     
     def is_alive(self):
         return self.health > 0
