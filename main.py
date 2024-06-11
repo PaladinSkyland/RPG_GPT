@@ -42,10 +42,12 @@ class Main :
         while True:
             with Live(self.console, refresh_per_second=10) as live, KeyboardInput() as input:
                 if mode != "fight":
+                    messages = self.header_messages
+                    if self.context.previous_action:
+                        messages += [self.openai.system_message("Previous context: " + self.context.environment.previous_description), self.openai.user_message("Previous action: " + self.context.previous_action["description"])]
                     if self.context.choosen_action:
-                        messages = self.header_messages + [self.openai.system_message("Current context: " + self.context.environment.description), self.openai.user_message("Chosen action: " + self.context.choosen_action["description"])]
-                    else:
-                        messages = self.header_messages
+                        messages += [self.openai.system_message("Current context: " + self.context.environment.description), self.openai.user_message("Chosen action: " + self.context.choosen_action["description"])]
+
                     if mode == "story" and self.context.choosen_action and self.context.choosen_action["command"] == "fight":
                         messages += [self.openai.system_message(self.fight['prompt'])]
                         mode = "fight"
@@ -57,7 +59,10 @@ class Main :
                         mode = "story"
                     response = self.openai.return_completion(messages)
                     print(response)
-                    self.context.set_context_from_json(json.loads(response), mode)
+                    try:
+                        self.context.set_context_from_json(json.loads(response), mode)
+                    except:
+                        continue
                     self.console.title = f"{mode.capitalize()} time! :fire:"
                     self.console.description = self.context.environment.description
                     self.console.actions = self.context.actions
@@ -80,7 +85,7 @@ class Main :
                             self.player.add_exp(self.console.enemy.xp)
                             self.player.add_gold(self.console.enemy.gold)
                             self.console.title = "Story time! :fire:"
-                            self.console.description = f"You defeated the enemy! You gained {player_damage} experience points and {self.console.enemy.gold} gold!"
+                            self.console.description = f"You defeated the enemy! You gained {self.console.enemy.xp} experience points and {self.console.enemy.gold} gold!"
                             self.console.actions = self.context.actions
                             self.console.enemy = None
                             mode = "win"

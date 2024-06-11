@@ -7,6 +7,7 @@ class Environment:
     def __init__(self, difficulty = 0 , description = '', objects_in_range = []):
         self.difficulty = difficulty
         self.description = description
+        self.previous_description = ""
         self.objects_in_range = objects_in_range
 
 class Context:
@@ -14,6 +15,7 @@ class Context:
         self.environment = Environment()
         self.actions = []
         self.choosen_action = None
+        self.previous_action = None
         self.results_command = []
         self.enemy = None
         self.fight_actions = [                            
@@ -25,6 +27,7 @@ class Context:
 
 
     def set_context_from_json(self, json, mode):
+        self.environment.previous_description = self.environment.description
         self.environment.description = json['description']
         self.actions = []
         if mode == "story":
@@ -43,4 +46,5 @@ class Context:
         self.actions.append({'title': action["title"].strip(), 'description': action["description"].strip(), 'icon': action["icon"].strip(), 'command': action["command"].strip()})
 
     def choose_action(self, index):
+        self.previous_action = self.choosen_action
         self.choosen_action = self.actions[index]

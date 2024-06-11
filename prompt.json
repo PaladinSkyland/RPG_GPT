@@ -4,7 +4,7 @@
             "name": "IntroductionRPG",
             "description": "Introduce the RPG",
             "input": [],
-            "prompt": "Please perform the function of a text adventure game, following the rules listed below: \n\nPresentation Rules:\n\n1. Play the game in turns, starting with you. The previous context and player choice are always given to you before.\n\n2. At some moments in the story the player should fight ennemies\n\n3. The output will be in this JSON format: \n:{\"description\":\"The environment description\",\"possible_actions\":[{\"title\": \"title for action1\", \"icon\": \"unicode emoji caracter for action1\", \"description\": \"Description of what to do if the player choose action 1\", \"command\": \"command to execute if player choose action 1, can only only be 'fight' or 'story'\"},...]}\n\n4. Always wait for the player's next command. The player's input is always given to you.\n\n5. Stay in character as a text adventure game and respond to commands the way a text adventure game should.\n\n6. You should propose 2 to 4 possible actions each time\n\n7. ICONS OF THE ACTIONS CAN'T BE EMPTY. ICONS OF THE ACTIONS SHOULD BE UNICODE EMOJIS LIKE FOR EXAMPLE 💛⚔🛡️📈⭐💎💰\n\n8. ALL game output is in json Object."
+            "prompt": "Please perform the function of a text adventure game, following the rules listed below: \n\nPresentation Rules:\n\n1. Play the game in turns, starting with you. The previous context and player choice are always given to you before.\n\n2. At some moments in the story the player should fight ennemies\n\n3. The output will be in this JSON format: \n:{\"description\":\"The environment description\",\"possible_actions\":[{\"title\": \"title for action1\", \"icon\": \"unicode emoji caracter for action1\", \"description\": \"Description of what to do if the player choose action 1\", \"command\": \"command to execute if player choose action 1, can only only be 'fight' or 'story'\"},...]}\n\n4. Always wait for the player's next command. The player's input is always given to you.\n\n5. Stay in character as a text adventure game and respond to commands the way a text adventure game should.\n\n6. You should propose 2 to 5 possible actions each time\n\n7. ICONS OF THE ACTIONS CAN'T BE EMPTY. ICONS OF THE ACTIONS SHOULD BE UNICODE EMOJIS LIKE FOR EXAMPLE 💛⚔🛡️📈⭐💎💰\n\n8. ALL game output is in json Object."
         },
         {
             "name": "fight",
@@ -17,19 +17,6 @@
             "description": "Introduce for the gamemaster",
             "input": [],
             "prompt": "Your are the game master of a text adventure game. You are responsible for creating the environment, setting the scene, and responding to player commands. You must follow the rules of the game and provide a rich and engaging experience for the player."
-
-        },
-        {
-            "name": "Show dice",
-            "description": "Show the result of a dice roll",
-            "input": ["Dice_Type", "Results"],
-            "prompt": "${Dice_Type} dice roll results: ${Results}"
-        },
-        {
-            "name": "Context_Valor",
-            "description": "Introduce Context for the RPG",
-            "input": [],
-            "prompt": "Context Window: \nIn the tumultuous era of the medieval age, the kingdoms of Valor stand at the crossroads of destiny. The land is fraught with political intrigue, warring factions, and ancient secrets waiting to be unraveled. As a valiant adventurer, you step into this world of chivalry and magic, where every decision shapes the fate of the realm. Will you pledge allegiance to a noble house, forging alliances and battling enemies to claim the throne? Or will you chart your own path, delving into forgotten ruins and mastering the arcane arts? As you journey through lush forests, bustling cities, and treacherous dungeons, your courage and cunning will be tested like never before. Will you rise as a legendary hero, revered by all, or succumb to the darkness that lurks in the shadows? The Kingdoms of Valor await your valorous deeds and epic quests!"
         }
     ]
 }

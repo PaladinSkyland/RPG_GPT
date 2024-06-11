@@ -13,7 +13,7 @@ class Enemy:
         self.health -= damage
 
     def attack_target(self, target):
-        damage = self.attack - target.get_defense()
+        damage = max(0, self.attack - target.get_defense())
         target.take_damage(damage)
         return damage
     
