@@ -1,10 +1,6 @@
 from rich.live import Live
 from CustomLiveable import CustomLiveable
 from Player import Player
-from Enemy import Enemy
-from Item import Item
-from StatusEffect import StatusEffect
-from Consumable import Consumable
 from KeyboardInput import KeyboardInput
 
 import json
@@ -29,8 +25,6 @@ class Main :
                 IntroductionRPG = prompt
             if prompt['name'] == 'Who are you?':
                 whoareu = prompt
-            if prompt['name'] == 'Context_Valor':
-                Context_Valor = prompt
             if prompt['name'] == 'fight':
                 self.fight = prompt
 
@@ -53,6 +47,7 @@ class Main :
                         mode = "fight"
                     if mode == "win":
                         messages += [self.openai.system_message("You won the fight against the enemy!")]
+                        self.context.choosen_action["command"] = "story"
                         mode = "story"
                     if mode == "runaway":
                         messages += [self.openai.system_message("You ran away from the enemy!")]
@@ -82,8 +77,7 @@ class Main :
                     if self.console.input == '1':
                         player_damage = self.player.attack_target(self.console.enemy)
                         if not self.console.enemy.is_alive():
-                            self.player.add_exp(self.console.enemy.xp)
-                            self.player.add_gold(self.console.enemy.gold)
+                            self.player.defeat(self.console.enemy)
                             self.console.title = "Story time! :fire:"
                             self.console.description = f"You defeated the enemy! You gained {self.console.enemy.xp} experience points and {self.console.enemy.gold} gold!"
                             self.console.actions = self.context.actions
@@ -144,5 +138,4 @@ class Main :
                     self.console.previous_action = self.context.choosen_action["description"]
 
 if __name__ == "__main__":
-    main = Main()
-    main.start()
+    Main().start()

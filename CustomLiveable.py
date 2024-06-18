@@ -1,16 +1,12 @@
-from rich.markdown import Markdown
 from rich.console import Group, Console
 from rich.align import Align
 from rich.rule import Rule
 from rich.progress import Progress, BarColumn, MofNCompleteColumn
-from rich.prompt import Prompt
 from rich.table import Table
 from rich.panel import Panel
-from rich.text import Text
 import time
 from threading import Thread
 from rich.panel import Panel
-from rich.columns import Columns
 from rich.box import MINIMAL
 
 class CustomLiveable:
@@ -21,12 +17,11 @@ class CustomLiveable:
         self.title = ""
         self.description = ""
         self.previous_action = None
-        self.console = Console()
-        self.console.clear()
         self.input = ''
-        self.cursor = 0
         self.cursor_visible = True
         self.last_action = 0
+        self.console = Console()
+        self.console.clear()
         Thread(target=self.toggle_cursor, daemon=True).start()
 
 
@@ -45,11 +40,7 @@ class CustomLiveable:
         grid.add_column(justify="left")
         grid.add_column(justify="left")
         grid.add_column(justify="left")
-        grid.add_row(
-            f":crossed_swords:  Attack: {self.player.get_attack()}",
-            f"🛡️  Defense: {self.player.get_defense()}",
-            f":chart_increasing: Effects: {' '.join([status.icon for status in self.player.statuseffect.values()])}"
-        )
+        grid.add_row(f":crossed_swords:  Attack: {self.player.get_attack()}", f"🛡️  Defense: {self.player.get_defense()}", f":chart_increasing: Effects:")
         grid.add_row(f":star: Level: {self.player.get_level()}", f":gem: XP: {self.player.get_exp()}", f":moneybag: Gold: {self.player.get_gold()}")
         group.append(grid)
         group.append("")
@@ -63,11 +54,7 @@ class CustomLiveable:
             grid.add_column(justify="left")
             grid.add_column(justify="left")
             grid.add_column(justify="left")
-            grid.add_row(
-                f":crossed_swords: Attack: {self.enemy.attack}",
-                f"🛡️ Defense: {self.enemy.defense}",
-                f":chart_increasing: Effects: {' '.join([status.icon for status in self.enemy.statuseffect.values()])}"
-            )
+            grid.add_row(f":crossed_swords: Attack: {self.enemy.attack}", f"🛡️ Defense: {self.enemy.defense}", f":chart_increasing: Effects:")
             grid.add_row(f":gem: XP: {self.enemy.xp}", f":moneybag: Gold: {self.enemy.gold}", "")
             group.append(grid)
             group.append("")
